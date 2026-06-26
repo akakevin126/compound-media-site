@@ -1,27 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --ink: #2D3250;
+  --coral: #F4837C;
+  --coral-hover: #EF6F66;
+  --coral-light: #FCE9E7;
+  --cash: #4ADE80;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .chunky {
+    border: 3px solid #2D3250;
+    box-shadow: 6px 6px 0 0 #2D3250;
+    border-radius: 9999px;
+  }
+
+  .chunky-card {
+    border: 3px solid #2D3250;
+    box-shadow: 8px 8px 0 0 #2D3250;
+    border-radius: 1.5rem;
+  }
+
+  .chunky-sm {
+    border: 3px solid #2D3250;
+    box-shadow: 4px 4px 0 0 #2D3250;
+    border-radius: 9999px;
+  }
+
+  .btn-coral {
+    @apply chunky bg-coral text-white font-bold uppercase tracking-wide px-8 py-4 cursor-pointer transition-all duration-150 inline-flex items-center gap-2;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+    color: white;
+  }
+
+  .btn-coral:hover, .btn-coral:active {
+    transform: translate(3px, 3px);
+    box-shadow: 3px 3px 0 0 #2D3250;
+    background-color: var(--coral-hover);
+  }
+
+  .chip {
+    @apply chunky-sm bg-white px-5 py-2.5 cursor-pointer font-semibold text-ink transition-all duration-150 inline-flex items-center gap-2;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .chip:hover {
+    background-color: var(--coral-light);
+    border-color: var(--coral);
+    box-shadow: 4px 4px 0 0 var(--coral);
+    color: var(--coral);
+  }
+
+  .chip-selected {
+    background-color: var(--coral-light) !important;
+    border-color: var(--coral) !important;
+    box-shadow: 4px 4px 0 0 var(--coral) !important;
+    color: var(--coral) !important;
+  }
+
+  .data-pill {
+    @apply chunky bg-white px-4 py-2 font-semibold text-ink text-sm;
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+  .sky-gradient {
+    background: linear-gradient(180deg, #1C9FDB 0%, #3DB4EA 45%, #8FD4F0 100%);
   }
 }
