@@ -27,7 +27,7 @@ export function Nav() {
             <NavLink href="/#results">Results</NavLink>
             <NavLink href="/#pricing">Pricing</NavLink>
             <NavLink href="/#about">About</NavLink>
-            <NavLink href="/#blog">Blog</NavLink>
+            <NavLink href="/blog">Blog</NavLink>
           </div>
 
           {/* CTA */}
@@ -64,14 +64,20 @@ export function Nav() {
       {/* Mobile menu */}
       {mobileOpen && (
         <div className="md:hidden border-t-[3px] border-ink bg-white px-4 py-6 flex flex-col gap-4">
-          {["Services", "Results", "Pricing", "About", "Blog"].map((item) => (
+          {[
+            { label: "Services", href: "/#services" },
+            { label: "Results", href: "/#results" },
+            { label: "Pricing", href: "/#pricing" },
+            { label: "About", href: "/#about" },
+            { label: "Blog", href: "/blog" },
+          ].map((item) => (
             <Link
-              key={item}
-              href={`/#${item.toLowerCase()}`}
+              key={item.label}
+              href={item.href}
               className="font-semibold text-ink hover:text-coral transition-colors"
               onClick={() => setMobileOpen(false)}
             >
-              {item}
+              {item.label}
             </Link>
           ))}
           <Link href="/growth-plan" onClick={() => setMobileOpen(false)}>
