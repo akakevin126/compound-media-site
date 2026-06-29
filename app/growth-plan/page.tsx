@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useReducer } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { ChunkyChip } from "../components/ChunkyChip";
 import { ChunkyButton } from "../components/ChunkyButton";
@@ -52,7 +52,7 @@ const SERVICES_OPTIONS = [
   "Content Strategy",
   "Email Marketing",
   "SEO",
-  "Conversion Rate Optimization (CRO)",
+  "CRO",
   "Direct Marketing",
   "Other",
 ];
@@ -61,18 +61,18 @@ const GOALS_OPTIONS = [
   "Increase revenue",
   "Increase profit",
   "Get more conversions",
-  "Lower my acquisition cost",
-  "Improve my ROI",
+  "Lower acquisition cost",
+  "Improve ROI",
   "All of the above",
   "Other",
 ];
 
 const BUDGET_OPTIONS = [
-  "$0 – $1,000",
-  "$1,001 – $5,000",
-  "$5,001 – $10,000",
-  "$10,001 – $25,000",
-  "$25,001 – $100,000",
+  "$0 - $1,000",
+  "$1,001 - $5,000",
+  "$5,001 - $10,000",
+  "$10,001 - $25,000",
+  "$25,001 - $100,000",
   "$100,001+",
 ];
 
@@ -93,12 +93,9 @@ const STEP_SUBS = [
 ];
 
 // ── Slide animation ────────────────────────────────────────────────────────
-
-const VARIANTS = {
-  enter: (dir: number) => ({ x: dir > 0 ? 80 : -80, opacity: 0 }),
-  center: { x: 0, opacity: 1 },
-  exit: (dir: number) => ({ x: dir < 0 ? 80 : -80, opacity: 0 }),
-};
+// Each step is keyed and remounts, replaying an enter slide+fade. We deliberately
+// avoid AnimatePresence/exit transitions here: mode="wait" deadlocks under React
+// 18 StrictMode (the first exit never resolves), which would freeze the funnel.
 
 // ── Main component ─────────────────────────────────────────────────────────
 
@@ -106,6 +103,7 @@ export default function GrowthPlan() {
   const [step, setStep] = useState(0); // 0-3 = steps, 4 = success
   const [direction, setDirection] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [state, dispatch] = useReducer(funnelReducer, {
     services: [],
     goals: [],
@@ -139,7 +137,9 @@ export default function GrowthPlan() {
   const handleSubmit = async () => {
     if (!isValid(3)) return;
     setSubmitting(true);
+    setSubmitError(false);
 
+    // Answers stay in state regardless of outcome — we never lose them on error.
     const payload = {
       services: state.services,
       goals: state.goals,
@@ -148,17 +148,29 @@ export default function GrowthPlan() {
       name: state.name,
       email: state.email,
       phone: state.phone,
-      source: "compoundmedia.io /growth-plan",
-      submittedAt: new Date().toISOString(),
     };
 
-    // TODO: wire up lead capture here
-    console.log("[Compound Media] Lead captured:", payload);
+    try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({ ok: false }));
 
-    await new Promise((r) => setTimeout(r, 1200));
-    setSubmitting(false);
-    setDirection(1);
-    setStep(4);
+      if (!res.ok || !data.ok) {
+        setSubmitError(true);
+        setSubmitting(false);
+        return;
+      }
+
+      setSubmitting(false);
+      setDirection(1);
+      setStep(4);
+    } catch {
+      setSubmitError(true);
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -226,15 +238,11 @@ export default function GrowthPlan() {
 
       {/* Card */}
       <div className="relative z-10 max-w-2xl mx-auto px-4 pb-20">
-        <AnimatePresence mode="wait" custom={direction}>
-          {step < 4 ? (
+        {step < 4 ? (
             <motion.div
               key={`step-${step}`}
-              custom={direction}
-              variants={VARIANTS}
-              initial="enter"
-              animate="center"
-              exit="exit"
+              initial={{ x: direction > 0 ? 70 : -70, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.35, ease: "easeInOut" }}
               className="bg-white border-[3px] border-ink rounded-card shadow-[8px_8px_0_0_#2D3250] p-6 sm:p-10"
             >
@@ -339,6 +347,17 @@ export default function GrowthPlan() {
                 </div>
               )}
 
+              {/* Submit error (step 4 only) — answers are preserved */}
+              {step === 3 && submitError && (
+                <div className="mt-6 bg-coral-light border-[3px] border-coral rounded-2xl px-5 py-4 flex items-start gap-3">
+                  <span className="text-coral text-lg leading-none mt-0.5">!</span>
+                  <p className="text-sm text-ink font-medium">
+                    Something went wrong sending your plan request. Your answers are saved —
+                    just hit <span className="font-bold text-coral">Get My Plan</span> again to retry.
+                  </p>
+                </div>
+              )}
+
               {/* Action row */}
               <div className="flex items-center justify-between mt-8 gap-4">
                 {step > 0 ? (
@@ -369,6 +388,8 @@ export default function GrowthPlan() {
                         </svg>
                         Building…
                       </span>
+                    ) : submitError ? (
+                      "Try Again →"
                     ) : (
                       "Get My Plan →"
                     )}
@@ -404,7 +425,8 @@ export default function GrowthPlan() {
                 Your growth plan is on the way!
               </h2>
               <p className="text-ink/60 text-base sm:text-lg mb-8 max-w-md mx-auto">
-                Check your inbox — we&apos;re building your custom compounding roadmap and will have it to you shortly.
+                Your growth plan is on the way — we&apos;ll be in touch shortly to walk you
+                through your custom compounding roadmap.
               </p>
 
               <div className="bg-coral-light border-[3px] border-coral rounded-card p-5 mb-8 text-left max-w-xs mx-auto">
@@ -421,7 +443,6 @@ export default function GrowthPlan() {
               </Link>
             </motion.div>
           )}
-        </AnimatePresence>
       </div>
     </div>
   );
