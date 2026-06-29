@@ -31,6 +31,15 @@ const RESULTS = [
   { metric: "48hr", label: "Average time to first strategy session" },
 ];
 
+const CLIENTS = [
+  { name: "I Must Manifest", url: "https://imustmanifest.com/" },
+  { name: "Green Tsunami Foods", url: "https://greentsunamifoods.com/" },
+  { name: "AHBPA", url: "https://ahbpa.org/" },
+  { name: "Serenity Concrete & Fence", url: "https://www.serenityconcretefence.com/" },
+  { name: "Texas Air Pro", url: "https://www.txairpro.com/index.html" },
+  { name: "Property Tax Relief Group", url: "https://www.propertytaxreliefgroup.com/" },
+];
+
 const PILL_POSITIONS = [
   "absolute -left-4 sm:-left-20 lg:-left-28 top-8",
   "absolute -right-4 sm:-right-20 lg:-right-28 top-4",
@@ -184,11 +193,18 @@ export default function Home() {
           <p className="text-center text-xs font-bold text-ink/40 uppercase tracking-widest mb-5">
             Trusted by ambitious brands
           </p>
-          <div className="flex flex-wrap justify-center items-center gap-8 sm:gap-14">
-            {["BrandOne", "GrowCo", "ScaleUp", "NexGen", "Elevate", "PeakBrands"].map((name) => (
-              <span key={name} className="text-ink/25 font-bold text-xl" style={{ fontFamily: "'Fredoka', sans-serif" }}>
-                {name}
-              </span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 justify-items-center items-center gap-8 sm:gap-14">
+            {CLIENTS.map((client) => (
+              <a
+                key={client.name}
+                href={client.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ink/25 hover:text-coral font-bold text-xl text-center transition-all duration-200 hover:scale-105"
+                style={{ fontFamily: "'Fredoka', sans-serif" }}
+              >
+                {client.name}
+              </a>
             ))}
           </div>
         </div>
