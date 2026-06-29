@@ -27,7 +27,7 @@ const SERVICES = [
 const RESULTS = [
   { metric: "3.8×", label: "Average ROAS across paid channels" },
   { metric: "62%", label: "Avg. YoY revenue growth for clients" },
-  { metric: "180+", label: "Brands compounded so far" },
+  { metric: "30+", label: "Brands compounded so far" },
   { metric: "48hr", label: "Average time to first strategy session" },
 ];
 
@@ -38,6 +38,7 @@ const CLIENTS = [
   { name: "Serenity Concrete & Fence", url: "https://www.serenityconcretefence.com/" },
   { name: "Texas Air Pro", url: "https://www.txairpro.com/index.html" },
   { name: "Property Tax Relief Group", url: "https://www.propertytaxreliefgroup.com/" },
+  { name: "Manifest Apparel", url: "https://manifestapperal.myshopify.com" },
 ];
 
 const PILL_POSITIONS = [
@@ -193,7 +194,7 @@ export default function Home() {
           <p className="text-center text-xs font-bold text-ink/40 uppercase tracking-widest mb-5">
             Trusted by ambitious brands
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 justify-items-center items-center gap-8 sm:gap-14">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 justify-items-center items-center gap-8 sm:gap-14">
             {CLIENTS.map((client) => (
               <a
                 key={client.name}
