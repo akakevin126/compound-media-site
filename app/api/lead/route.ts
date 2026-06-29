@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     [COLUMNS.services]: { labels: services },
     [COLUMNS.goals]: { labels: goals },
     [COLUMNS.budget]: budget ? { labels: [budget] } : { labels: [] },
-    [COLUMNS.source]: "compoundmedia.io /growth-plan",
+    [COLUMNS.source]: "compoundm3dia.com /growth-plan",
     [COLUMNS.submitted]: { date: new Date().toISOString().slice(0, 10) },
   };
 
