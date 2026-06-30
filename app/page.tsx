@@ -39,6 +39,7 @@ const CLIENTS = [
   { name: "Texas Air Pro", url: "https://www.txairpro.com/index.html" },
   { name: "Property Tax Relief Group", url: "https://www.propertytaxreliefgroup.com/" },
   { name: "Manifest Apparel", url: "https://manifestapperal.myshopify.com" },
+  { name: "Imperial Kitchens", url: "https://www.imperial-kitchens.com/en" },
 ];
 
 const PILL_POSITIONS = [
@@ -194,7 +195,7 @@ export default function Home() {
           <p className="text-center text-xs font-bold text-ink/40 uppercase tracking-widest mb-5">
             Trusted by ambitious brands
           </p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 justify-items-center items-center gap-8 sm:gap-14">
+          <div className="grid grid-cols-2 sm:grid-cols-4 justify-items-center items-center gap-8 sm:gap-14">
             {CLIENTS.map((client) => (
               <a
                 key={client.name}
